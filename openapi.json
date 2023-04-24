@@ -1,0 +1,232 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "My Workspace",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/question/{topic_id}": {
+      "get": {
+        "summary": "Get Questoins in topic",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "topic_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3713169-run"
+      }
+    },
+    "/question": {
+      "get": {
+        "summary": "Get Questoins with topic",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3717307-run"
+      }
+    },
+    "/useranswer": {
+      "get": {
+        "summary": "Get UserAnswers",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserAnswer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3717308-run"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "QuestionAnswer": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "string",
+            "description": "Question ID"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "isValid": {
+            "type": "boolean"
+          }
+        },
+        "x-apidog-orders": [
+          "question_id",
+          "answer",
+          "isValid"
+        ],
+        "required": [
+          "question_id",
+          "answer",
+          "isValid"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": ""
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User e-mail"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password"
+          }
+        },
+        "x-apidog-orders": [
+          "name",
+          "email",
+          "password"
+        ],
+        "required": [
+          "name",
+          "email"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": ""
+      },
+      "Topic": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "x-apidog-orders": [
+          "name"
+        ],
+        "required": [
+          "name"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": ""
+      },
+      "UserAnswer": {
+        "type": "object",
+        "properties": {
+          "question_answer_id": {
+            "type": "string",
+            "description": "Answer"
+          },
+          "recordedAt": {
+            "type": "string",
+            "description": "Record time"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "UserID"
+          }
+        },
+        "x-apidog-orders": [
+          "question_answer_id",
+          "recordedAt",
+          "user_id"
+        ],
+        "required": [
+          "question_answer_id",
+          "user_id"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": ""
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "topic_id": {
+            "type": "string"
+          },
+          "explanation": {
+            "type": "string"
+          }
+        },
+        "x-apidog-orders": [
+          "question",
+          "topic_id",
+          "explanation"
+        ],
+        "required": [
+          "question",
+          "topic_id",
+          "explanation"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": ""
+      }
+    }
+  },
+  "servers": []
+}
