@@ -71,7 +71,7 @@ export default router;
 >>>>> ./ openapi-crud-requests.json
 {
 {{#each components.schemas}}
-    "/{{lowercase @key}}/crud": {
+    "/admin/crud/{{lowercase @key}}": {
       "post": {
         "summary": "Save {{@key}}",
         "x-apidog-folder": "",
@@ -104,7 +104,7 @@ export default router;
         "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3713731-run"
       }
     },
-    "/{{lowercase @key}}/crud/{id}": {
+    "/admin/crud/{{lowercase @key}}/{id}": {
       "get": {
         "summary": "Get {{@key}}",
         "x-apidog-folder": "",
