@@ -7,7 +7,7 @@
   },
   "tags": [],
   "paths": {
-    "/question/{topic_id}": {
+    "/question/topic/{topic_id}": {
       "get": {
         "summary": "Get Questoins in topic",
         "x-apidog-folder": "",
