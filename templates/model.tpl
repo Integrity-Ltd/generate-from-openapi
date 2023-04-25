@@ -3,11 +3,11 @@
 import { Schema, model, Types } from "mongoose";
 import Joi from "joi";
 
-const {{capitalLower @key}}Schema = new Schema({ {{#each this.properties}}{{#unless (startwith @key '_')}}
+const {{capitalLower @key}}Schema = new Schema({ {{#each this.properties}}
             {{@key}}: {
                 type: {{#if (endswith @key '_id')}}Types.ObjectId{{else}}{{capitalUpper this.type}}{{/if}},
                 required:{{#if (isexists @key ../required)}}true{{else}}false{{/if}},
-            },{{/unless}}{{/each}}
+            },{{/each}}
 });
 
 const {{@key}} = model("{{lowercase @key}}", {{capitalLower @key}}Schema);
