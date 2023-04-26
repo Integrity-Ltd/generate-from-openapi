@@ -28,6 +28,11 @@ import { Condition, ObjectId, UpdateWriteOpResult } from "mongoose";
 import Joi from "joi";
 const router = Router();
 
+router.get("/", async (req, res) => {
+    let result = await {{@key}}.{{@key}}.find({})
+    res.send(result);
+})
+
 router.get("/:id", async (req, res) => {
     let result = await {{@key}}.{{@key}}.find({ _id: req.params.id })
     res.send(result);
@@ -72,6 +77,31 @@ export default router;
 {
 {{#each components.schemas}}
     "/admin/crud/{{lowercase @key}}": {
+      "get": {
+        "summary": "Get all {{@key}}",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/{{@key}}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3719691-run"
+      },
       "post": {
         "summary": "Save {{@key}}",
         "x-apidog-folder": "",

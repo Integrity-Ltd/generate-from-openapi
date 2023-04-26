@@ -44,15 +44,25 @@
         "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3713169-run"
       }
     },
-    "/question": {
+    "/question/{_id}": {
       "get": {
-        "summary": "Get Questoins with topic",
+        "summary": "Get Questoins with topic and answers",
         "x-apidog-folder": "",
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -71,7 +81,7 @@
         "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3717307-run"
       }
     },
-    "/useranswer": {
+    "/useranswer/{user_id}": {
       "get": {
         "summary": "Get UserAnswers",
         "x-apidog-folder": "",
@@ -79,7 +89,17 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
