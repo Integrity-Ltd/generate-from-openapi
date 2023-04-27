@@ -121,6 +121,27 @@
   },
   "components": {
     "schemas": {
+      "DeleteResult": {
+        "type": "object",
+        "properties": {
+          "acknowledged": {
+            "type": "boolean"
+          },
+          "deletedCount": {
+            "type": "number"
+          }
+        },
+        "x-apidog-orders": [
+          "acknowledged",
+          "deletedCount"
+        ],
+        "required": [
+          "acknowledged",
+          "deletedCount"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": ""
+      },
       "LeaderBoardEntry": {
         "type": "object",
         "properties": {

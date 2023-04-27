@@ -1,11 +1,12 @@
 {{#each components.schemas}}
+{{#if (startswith this.x-apidog-folder 'CRUD')}}
 >>>>> ../quiz-sample/src/models/ {{@key}}.ts
 import { Schema, model, Types } from "mongoose";
 import Joi from "joi";
 
 const {{capitalLower @key}}Schema = new Schema({ {{#each this.properties}}
             {{@key}}: {
-                type: {{#if (endswith @key '_id')}}Types.ObjectId{{else}}{{capitalUpper this.type}}{{/if}},
+                type: {{#if (endswith @key '_id')}}Types.ObjectId{{else}}{{#if (endswith @key '_time')}}Date{{else}}{{capitalUpper this.type}}{{/if}}{{/if}},
                 required:{{#if (isexists @key ../required)}}true{{else}}false{{/if}},
             },{{/each}}
 });
@@ -13,8 +14,8 @@ const {{capitalLower @key}}Schema = new Schema({ {{#each this.properties}}
 const {{@key}} = model("{{lowercase @key}}", {{capitalLower @key}}Schema);
 
 const validate = ({{lowercase @key}}: object): Joi.ValidationResult => {
-    const schema = Joi.object().keys({ {{#each this.properties}}{{#unless (startwith @key '_')}}
-        {{@key}}: Joi.{{this.type}}(){{#if (isexists @key ../required)}}.required(){{/if}},{{/unless}}{{/each}}
+    const schema = Joi.object().keys({ {{#each this.properties}}{{#unless (startswith @key '_')}}
+        {{@key}}: Joi.{{#if (endswith @key '_time')}}date{{else}}{{this.type}}{{/if}}(){{#if (isexists @key ../required)}}.required(){{/if}},{{/unless}}{{/each}}
     });
     return schema.validate({{lowercase @key}});
 };
@@ -71,4 +72,5 @@ router.post("/", async (req, res) => {
 
 export default router;
 >>>>>
+{{/if}}
 {{/each}}

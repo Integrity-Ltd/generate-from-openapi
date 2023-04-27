@@ -1,6 +1,7 @@
 >>>>> ./ openapi-crud-requests.json
 {
 {{#each components.schemas}}
+{{#if (startswith this.x-apidog-folder 'CRUD')}}
     "/admin/crud/{{lowercase @key}}": {
       "get": {
         "summary": "Get all {{@key}}",
@@ -125,7 +126,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/{{@key}}"
+                  "$ref": "#/components/schemas/DeleteResult"
                 }
               }
             }
@@ -157,7 +158,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "null"
+                  "$ref": "#/components/schemas/DeleteResult"
                 }
               }
             }
@@ -166,6 +167,7 @@
         "x-run-in-apidog": ""
       }    
     }{{#unless @last}},{{/unless}}
+{{/if}}
 {{/each}}
 }
 >>>>>

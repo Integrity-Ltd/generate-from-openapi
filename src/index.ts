@@ -42,7 +42,7 @@ class CodeGenerator {
         Handlebars.registerHelper('isexists', function (value, array) {
             return array.includes(value);
         });
-        Handlebars.registerHelper('startwith', function (value, pattern) {
+        Handlebars.registerHelper('startswith', function (value, pattern) {
             let result = value.startsWith(pattern);
             return result;
         });
