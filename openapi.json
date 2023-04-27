@@ -121,6 +121,42 @@
   },
   "components": {
     "schemas": {
+      "UpdateResult": {
+        "type": "object",
+        "properties": {
+          "acknowledged": {
+            "type": "boolean"
+          },
+          "modifiedCount": {
+            "type": "number"
+          },
+          "upsertedId": {
+            "type": "string"
+          },
+          "upsertedCount": {
+            "type": "number"
+          },
+          "matchedCount": {
+            "type": "number"
+          }
+        },
+        "x-apidog-orders": [
+          "acknowledged",
+          "modifiedCount",
+          "upsertedId",
+          "upsertedCount",
+          "matchedCount"
+        ],
+        "required": [
+          "acknowledged",
+          "modifiedCount",
+          "upsertedId",
+          "upsertedCount",
+          "matchedCount"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": ""
+      },
       "DeleteResult": {
         "type": "object",
         "properties": {

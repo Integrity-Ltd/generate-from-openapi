@@ -126,7 +126,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeleteResult"
+                  "$ref": "#/components/schemas/UpdateResult"
                 }
               }
             }
