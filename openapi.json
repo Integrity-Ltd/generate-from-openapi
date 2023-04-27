@@ -121,6 +121,53 @@
   },
   "components": {
     "schemas": {
+      "LeaderBoardEntry": {
+        "type": "object",
+        "properties": {
+          "leaderboard_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          }
+        },
+        "x-apidog-orders": [
+          "leaderboard_id",
+          "user_id",
+          "score"
+        ],
+        "required": [
+          "leaderboard_id",
+          "user_id",
+          "score"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": "CRUD"
+      },
+      "Leaderboard": {
+        "type": "object",
+        "properties": {
+          "topic_id": {
+            "type": "string"
+          },
+          "thinkingtime": {
+            "type": "number"
+          }
+        },
+        "x-apidog-orders": [
+          "topic_id",
+          "thinkingtime"
+        ],
+        "required": [
+          "topic_id",
+          "thinkingtime"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": "CRUD"
+      },
       "QuestionAnswer": {
         "type": "object",
         "properties": {
@@ -131,22 +178,22 @@
           "answer": {
             "type": "string"
           },
-          "isValid": {
+          "isCorrect": {
             "type": "boolean"
           }
         },
         "x-apidog-orders": [
           "question_id",
           "answer",
-          "isValid"
+          "isCorrect"
         ],
         "required": [
           "question_id",
           "answer",
-          "isValid"
+          "isCorrect"
         ],
         "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        "x-apidog-folder": "CRUD"
       },
       "User": {
         "type": "object",
@@ -174,7 +221,7 @@
           "email"
         ],
         "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        "x-apidog-folder": "CRUD"
       },
       "Topic": {
         "type": "object",
@@ -190,7 +237,7 @@
           "name"
         ],
         "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        "x-apidog-folder": "CRUD"
       },
       "UserAnswer": {
         "type": "object",
@@ -199,26 +246,31 @@
             "type": "string",
             "description": "Answer"
           },
-          "recordedAt": {
+          "recorded_time": {
             "type": "string",
-            "description": "Record time"
+            "description": "$Format:\"YYYY-MM-DD HH:MM:SS\""
           },
           "user_id": {
             "type": "string",
             "description": "UserID"
+          },
+          "thinkingtime": {
+            "type": "number"
           }
         },
         "x-apidog-orders": [
           "question_answer_id",
-          "recordedAt",
-          "user_id"
+          "recorded_time",
+          "user_id",
+          "thinkingtime"
         ],
         "required": [
           "question_answer_id",
-          "user_id"
+          "user_id",
+          "thinkingtime"
         ],
         "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        "x-apidog-folder": "CRUD"
       },
       "Question": {
         "type": "object",
@@ -244,7 +296,7 @@
           "explanation"
         ],
         "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        "x-apidog-folder": "CRUD"
       }
     }
   },

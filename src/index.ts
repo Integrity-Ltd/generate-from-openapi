@@ -10,13 +10,20 @@ class CodeGenerator {
 
     constructor() {
         this.registerHelpers();
-        this.loadTemplate();
-        this.initContext();
     }
 
     public process() {
-        this.renderTemplate();
-        this.splitRenderedTemplateToFiles();
+        fs.readdir('./templates', (err, files) => {
+            files.forEach(file => {
+                this.loadTemplate(file);
+                this.initContext();
+                this.renderTemplate();
+                this.splitRenderedTemplateToFiles();
+                if (file == 'crud-requests.tpl') {
+                    this.updateOpenApiDeclaration();
+                }
+            })
+        })
     }
 
     private registerHelpers() {
@@ -45,8 +52,8 @@ class CodeGenerator {
         });
     }
 
-    private loadTemplate() {
-        this.template = fs.readFileSync('./templates/model.tpl', 'utf8');
+    private loadTemplate(file: string) {
+        this.template = fs.readFileSync('./templates/' + file, 'utf8');
     }
 
     private initContext() {
@@ -104,7 +111,6 @@ class CodeGenerator {
 try {
     let codeGenerator: CodeGenerator = new CodeGenerator();
     codeGenerator.process();
-    codeGenerator.updateOpenApiDeclaration();
     console.log("Rendering to files finished.")
 } catch (err) {
     console.error(err);
