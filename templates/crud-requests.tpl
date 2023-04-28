@@ -9,7 +9,7 @@
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": [],
+        "tags": ["{{@key}}"],
         "parameters": [],
         "responses": {
           "200": {
@@ -34,7 +34,7 @@
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": [],
+        "tags": ["{{@key}}"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -67,7 +67,7 @@
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": [],
+        "tags": ["{{@key}}"],
         "parameters": [
           {
             "name": "id",
@@ -99,7 +99,7 @@
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": [],
+        "tags": ["{{@key}}"],
         "parameters": [
           {
             "name": "id",
@@ -140,7 +140,7 @@
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": [],
+        "tags": ["{{@key}}"],
         "parameters": [
           {
             "name": "id",
