@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "My Workspace",
+    "title": "QuizWorld Admin sample",
     "description": "",
     "version": "1.0.0"
   },

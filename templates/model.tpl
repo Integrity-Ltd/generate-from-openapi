@@ -6,7 +6,7 @@ import Joi from "joi";
 
 const {{capitalLower @key}}Schema = new Schema({ {{#each this.properties}}
             {{@key}}: {
-                type: {{#if (endswith @key '_id')}}Types.ObjectId{{else}}{{#if (endswith @key '_time')}}Date{{else}}{{capitalUpper this.type}}{{/if}}{{/if}},
+                type: {{#if (endswith @key '_id')}}Types.ObjectId{{else if (endswith @key '_time')}}Date{{else}}{{capitalUpper this.type}}{{/if}},
                 required:{{#if (isexists @key ../required)}}true{{else}}false{{/if}},
             },{{/each}}
 });

@@ -50,6 +50,29 @@ class CodeGenerator {
             let result = value.endsWith(pattern);
             return result;
         });
+        Handlebars.registerHelper('compare', function (lvalue: any, operator: any, rvalue: any) {
+            if (arguments.length < 3) {
+                throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+            }
+            let operators: any = {
+                '==': function (l: any, r: any) { return l == r; },
+                '===': function (l: any, r: any) { return l === r; },
+                '!=': function (l: any, r: any) { return l != r; },
+                '!==': function (l: any, r: any) { return l !== r; },
+                '<': function (l: any, r: any) { return l < r; },
+                '>': function (l: any, r: any) { return l > r; },
+                '<=': function (l: any, r: any) { return l <= r; },
+                '>=': function (l: any, r: any) { return l >= r; },
+                'typeof': function (l: any, r: any) { return typeof l == r; }
+            };
+
+            if (!operators[operator]) {
+                throw new Error("Handlerbars Helper 'compare' doesn't know the operator " + operator);
+            }
+
+            let result = operators[operator](lvalue, rvalue);
+            return result;
+        });
     }
 
     private loadTemplate(file: string) {
