@@ -18,7 +18,7 @@ const validate = ({{lowercase @key}}: object): Joi.ValidationResult => {
         {{@key}}: Joi.{{#if (endswith @key '_time')}}date{{else}}{{this.type}}{{/if}}(){{#if (isexists @key ../required)}}.required(){{/if}},{{/unless}}{{/each}}
     });
     return schema.validate({{lowercase @key}});
-};
+}
 
 export default { {{@key}}, validate };
 >>>>>
@@ -30,19 +30,19 @@ import Joi from "joi";
 const router = Router();
 
 router.get("/", async (req, res) => {
-    let result = await {{@key}}.{{@key}}.find({})
+    let result = await {{@key}}.{{@key}}.find({});
     res.send(result);
-})
+});
 
 router.get("/:id", async (req, res) => {
-    let result = await {{@key}}.{{@key}}.find({ _id: req.params.id })
+    let result = await {{@key}}.{{@key}}.find({ _id: req.params.id });
     res.send(result);
-})
+});
 
 router.delete("/:id", async (req, res) => {
-    let result = await {{@key}}.{{@key}}.deleteOne({ _id: req.params.id })
+    let result = await {{@key}}.{{@key}}.deleteOne({ _id: req.params.id });
     res.send(result);
-})
+});
 
 router.put("/:id", async (req, res) => {
     let valid: Joi.ValidationResult = {{@key}}.validate(req.body);
@@ -50,13 +50,13 @@ router.put("/:id", async (req, res) => {
         const filter: Condition<ObjectId> = { _id: req.params.id };
         const updateDoc = {
             $set: req.body
-        }
+        };
         let result: UpdateWriteOpResult = await {{@key}}.{{@key}}.updateOne(filter, updateDoc);
         res.send(result);
     } else {
-        res.status(400).send({ message: valid.error })
+        res.status(400).send({ message: valid.error });
     }
-})
+});
 
 router.post("/", async (req, res) => {
     let valid: Joi.ValidationResult = {{@key}}.validate(req.body);
@@ -66,9 +66,9 @@ router.post("/", async (req, res) => {
             res.send({{capitalLower @key}})
         );
     } else {
-        res.status(400).send({ message: valid.error })
+        res.status(400).send({ message: valid.error });
     }
-})
+});
 
 export default router;
 >>>>>

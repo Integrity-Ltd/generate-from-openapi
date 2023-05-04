@@ -121,6 +121,38 @@
   },
   "components": {
     "schemas": {
+      "Evaluation": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "string"
+          },
+          "evaluation": {
+            "type": "number",
+            "description": "1 - aggree, 2-partial aggree, 3 - not aggree"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "recorded_time": {
+            "type": "string"
+          }
+        },
+        "x-apidog-orders": [
+          "question_id",
+          "evaluation",
+          "user_id",
+          "recorded_time"
+        ],
+        "required": [
+          "question_id",
+          "evaluation",
+          "user_id",
+          "recorded_time"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": "CRUD"
+      },
       "UpdateResult": {
         "type": "object",
         "properties": {
@@ -177,53 +209,6 @@
         ],
         "x-apidog-ignore-properties": [],
         "x-apidog-folder": ""
-      },
-      "LeaderBoardEntry": {
-        "type": "object",
-        "properties": {
-          "leaderboard_id": {
-            "type": "string"
-          },
-          "user_id": {
-            "type": "string"
-          },
-          "score": {
-            "type": "number"
-          }
-        },
-        "x-apidog-orders": [
-          "leaderboard_id",
-          "user_id",
-          "score"
-        ],
-        "required": [
-          "leaderboard_id",
-          "user_id",
-          "score"
-        ],
-        "x-apidog-ignore-properties": [],
-        "x-apidog-folder": "CRUD"
-      },
-      "Leaderboard": {
-        "type": "object",
-        "properties": {
-          "topic_id": {
-            "type": "string"
-          },
-          "thinkingtime": {
-            "type": "number"
-          }
-        },
-        "x-apidog-orders": [
-          "topic_id",
-          "thinkingtime"
-        ],
-        "required": [
-          "topic_id",
-          "thinkingtime"
-        ],
-        "x-apidog-ignore-properties": [],
-        "x-apidog-folder": "CRUD"
       },
       "QuestionAnswer": {
         "type": "object",
@@ -285,13 +270,28 @@
         "properties": {
           "name": {
             "type": "string"
+          },
+          "difficulty": {
+            "type": "number"
+          },
+          "parent_topic_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
           }
         },
         "x-apidog-orders": [
-          "name"
+          "name",
+          "difficulty",
+          "parent_topic_id",
+          "description"
         ],
         "required": [
-          "name"
+          "name",
+          "difficulty",
+          "parent_topic_id",
+          "description"
         ],
         "x-apidog-ignore-properties": [],
         "x-apidog-folder": "CRUD"
