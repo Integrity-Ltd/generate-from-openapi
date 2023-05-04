@@ -289,9 +289,7 @@
         ],
         "required": [
           "name",
-          "difficulty",
-          "parent_topic_id",
-          "description"
+          "difficulty"
         ],
         "x-apidog-ignore-properties": [],
         "x-apidog-folder": "CRUD"
