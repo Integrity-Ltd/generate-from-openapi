@@ -7,7 +7,7 @@
   },
   "tags": [],
   "paths": {
-    "/question/topic/{topic_id}": {
+    "/api/question/topic/{topic_id}": {
       "get": {
         "summary": "Get Questoins in topic",
         "x-apidog-folder": "",
@@ -44,7 +44,7 @@
         "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3713169-run"
       }
     },
-    "/question/{_id}": {
+    "/api/question/{_id}": {
       "get": {
         "summary": "Get Questoins with topic and answers",
         "x-apidog-folder": "",
@@ -81,7 +81,7 @@
         "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3717307-run"
       }
     },
-    "/useranswer/{user_id}": {
+    "/api/useranswer/{user_id}": {
       "get": {
         "summary": "Get UserAnswers",
         "x-apidog-folder": "",

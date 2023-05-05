@@ -2,7 +2,7 @@
 {
 {{#each components.schemas}}
 {{#if (startswith this.x-apidog-folder 'CRUD')}}
-    "/admin/crud/{{lowercase @key}}": {
+    "/api/admin/crud/{{lowercase @key}}": {
       "get": {
         "summary": "Get all {{@key}}",
         "x-apidog-folder": "CRUD/{{@key}}",
@@ -60,7 +60,7 @@
         "x-run-in-apidog": ""
       }
     },
-    "/admin/crud/{{lowercase @key}}/{id}": {
+    "/api/admin/crud/{{lowercase @key}}/{id}": {
       "get": {
         "summary": "Get {{@key}}",
         "x-apidog-folder": "CRUD/{{@key}}",
