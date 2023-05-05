@@ -51,8 +51,11 @@ router.put("/:id", async (req, res) => {
         const updateDoc = {
             $set: req.body
         };
-        let result: UpdateWriteOpResult = await {{@key}}.{{@key}}.updateOne(filter, updateDoc);
-        res.send(result);
+        {{@key}}.{{@key}}.updateOne(filter, updateDoc).then((result) =>
+            res.send(result)
+        ).catch((err) =>
+            res.status(400).send({ message: err })
+        );
     } else {
         res.status(400).send({ message: valid.error });
     }
@@ -64,6 +67,8 @@ router.post("/", async (req, res) => {
         let {{capitalLower @key}} = new {{@key}}.{{@key}}(req.body);
         {{capitalLower @key}}.save().then(() =>
             res.send({{capitalLower @key}})
+        ).catch((err) =>
+            res.status(400).send({ message: err })
         );
     } else {
         res.status(400).send({ message: valid.error });
