@@ -117,10 +117,119 @@
         },
         "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3717308-run"
       }
+    },
+    "/api/question/withtopic": {
+      "get": {
+        "summary": "Get All Question with Topic",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "x-apidog-refs": {
+                      "01GZNM0T4P0GWFCG374FSYXJSJ": {
+                        "$ref": "#/components/schemas/Question"
+                      }
+                    },
+                    "properties": {
+                      "question": {
+                        "type": "string"
+                      },
+                      "topic_id": {
+                        "type": "string"
+                      },
+                      "explanation": {
+                        "type": "string"
+                      },
+                      "topic": {
+                        "$ref": "#/components/schemas/Topic"
+                      }
+                    },
+                    "required": [
+                      "topic",
+                      "question",
+                      "topic_id",
+                      "explanation"
+                    ],
+                    "x-apidog-orders": [
+                      "01GZNM0T4P0GWFCG374FSYXJSJ",
+                      "topic"
+                    ],
+                    "x-apidog-ignore-properties": [
+                      "question",
+                      "topic_id",
+                      "explanation"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3730984-run"
+      }
+    },
+    "/api/topic/withparent": {
+      "get": {
+        "summary": "Get Topic with parent topics",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Topic"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3733310-run"
+      }
     }
   },
   "components": {
     "schemas": {
+      "Difficulty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "x-apidog-orders": [
+          "name",
+          "value"
+        ],
+        "required": [
+          "name",
+          "value"
+        ],
+        "x-apidog-ignore-properties": [],
+        "x-apidog-folder": "CRUD"
+      },
       "Evaluation": {
         "type": "object",
         "properties": {
@@ -271,8 +380,8 @@
           "name": {
             "type": "string"
           },
-          "difficulty": {
-            "type": "number"
+          "difficulty_id": {
+            "type": "string"
           },
           "parent_topic_id": {
             "type": "string"
@@ -283,13 +392,13 @@
         },
         "x-apidog-orders": [
           "name",
-          "difficulty",
+          "difficulty_id",
           "parent_topic_id",
           "description"
         ],
         "required": [
           "name",
-          "difficulty"
+          "difficulty_id"
         ],
         "x-apidog-ignore-properties": [],
         "x-apidog-folder": "CRUD"

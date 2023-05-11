@@ -1,16 +1,98 @@
 {{#each components.schemas}}
 {{#if (startswith this.x-apidog-folder 'CRUD')}}
 >>>>> ../quiz-admin/src/pages/ {{@key}}.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Toast } from "primereact/toast";
+import { useForm, Controller } from "react-hook-form";
+import { InputText } from 'primereact/inputtext';
+import { InputNumber } from "primereact/inputnumber";
+import { Checkbox } from 'primereact/checkbox';
+import { Dropdown } from "primereact/dropdown";
+import { Button } from "primereact/button";
+import { classNames } from 'primereact/utils';
+import { Dialog } from 'primereact/dialog';
+import { ConfirmDialog } from 'primereact/confirmdialog';
+
+interface FormValues {
+{{#each this.properties}}
+    {{@key}}: {{this.type}};
+{{/each}}
+}
 
 const {{@key}} = () => {
     const [{{capitalLower @key}}Values, set{{@key}}Values] = useState([]);
+    const [editedRow, setEditedRow] = useState<any>({});
+    const [selectedRow, setSelectedRow] = useState<any>({});
+    const [visible, setVisible] = useState(false);
+    const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
 
     useEffect(() => {
         fetchAll();
     }, []);
+
+    useEffect(() => {
+        console.log(selectedRow);
+    }, [selectedRow]);
+
+    async function resolver(values: any) {
+        return {
+            values: {},
+            errors: {},
+        };
+    }
+
+    const toast = useRef<Toast>(null);
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({ resolver });
+
+    const onSubmit = (data: any) => {
+        const params = {
+{{#each this.properties}}
+            {{@key}}: control._formValues['{{@key}}']{{#if (endswith @key '_id')}} ? control._formValues['{{@key}}'] : undefined{{/if}},
+{{/each}}
+        };
+        if (editedRow && editedRow._id) {
+            fetch('/api/admin/crud/{{lowercase @key}}/' + editedRow._id, {
+                method: 'PUT',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                cache: 'no-cache',
+                body: JSON.stringify(params),
+            }).then((response) => { return response.json() }).then((data) => {
+                updatePage();
+                setVisible(false);
+                show("success", `Updated topic: ${JSON.stringify(data)}`);
+            }).catch((err) => show("error", err));
+        } else {
+            fetch('/api/admin/crud/{{lowercase @key}}', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                cache: 'no-cache',
+                body: JSON.stringify(params),
+            }).then((response) => { return response.json() }).then((data) => {
+                updatePage();
+                setVisible(false);
+                show('success', `Saved topic: ${JSON.stringify(data)}`);
+            }).catch((err) => show('error', err));
+        }
+    }
+
+    const updatePage = () => {
+        setSelectedRow({});
+        fetchAll();
+    }
+
+    const show = (severity: "success" | "info" | "warn" | "error" | undefined, message: string) => {
+        if (toast.current !== null) {
+            toast.current.show({ severity: severity, summary: 'Form submit', detail: message });
+        }
+    }
 
     const fetchAll = () => {
         fetch('/api/admin/crud/{{lowercase @key}}').then((response) => response.json()).then(data => {
@@ -18,14 +100,108 @@ const {{@key}} = () => {
             set{{@key}}Values(data);
         });
     }
+{{#each this.properties}}
+{{#if (endswith @key '_id')}}
+    const [{{slice @key 0 -3}}Values, set{{capitalUpper (slice @key 0 -3)}}Values] = useState<any>([]);
+    const fetch{{capitalUpper (slice @key 0 -3)}}Values = async () => {
+        let response = await fetch('/api/admin/crud/{{slice @key 0 -3}}');
+        let data = await response.json();
+        set{{capitalUpper (slice @key 0 -3)}}Values(data);
+    }
+{{/if}}
+{{/each}}
+    useEffect(() => {
+        //console.log(selectedRows);{{#each this.properties}}
+        {{#if (endswith @key '_id')}}fetch{{capitalUpper (slice @key 0 -3)}}Values();{{/if}}
+{{/each}}
+        if (editedRow) {
+{{#each this.properties}}
+            setValue("{{@key}}", {{#if (endswith @key '_id')}}editedRow.{{@key}}?editedRow.{{@key}}:null{{else if (compare this.type '==' 'number')}}editedRow.{{@key}}?editedRow.{{@key}}:0{{else}}editedRow.{{@key}}{{/if}});
+{{/each}}
+        } else {
+{{#each this.properties}}
+            setValue("{{@key}}", {{#if (compare this.type '==' 'number')}}0{{else if (compare this.type '==' 'boolean')}}false{{else}}''{{/if}});
+{{/each}}
+        }
+    }, [editedRow]);
+
+    const deleteSelectedRow = () => {
+        fetch('/api/admin/crud/{{lowercase @key}}/' + selectedRow._id, {
+            method: 'DELETE',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            cache: 'no-cache',
+            body: JSON.stringify({ action: 'delete' }),
+        }).then((response) => {
+            return response.json();
+        }).then(data => {
+            show("success", `Deleted {{@key}}: ${JSON.stringify(data)}`);
+            updatePage();
+        }).catch((err) => show("error", err));
+    }
 
     return (
-        <div className="card flex">
+        <div className="card">
+            <h2>{{@key}}</h2>
+            <Toast ref={toast} />
+            <Dialog header="{{@key}}" visible={visible} onHide={() => setVisible(false)} style=\{{ width: '50vw' }}>
+                <form onSubmit={handleSubmit(onSubmit)} style=\{{ width: '100%' }}>
+{{#each this.properties}}
+                    <Controller
+                        name="{{@key}}"
+                        control={control}
+                        rules=\{{ required: '{{@key}} is required.' }}
+                        render={({ field, fieldState }) => (
+                            <>
+                                <div className="grid align-items-baseline">
+                                    <div className="col-12 mb-2 md:col-2 md:mb-0">
+                                        <label htmlFor={field.name}>{{@key}}: </label>
+                                    </div>
+                                    <div className="col-12 md:col-10">
+{{#if (compare this.type '==' 'number')}}
+                                        <InputNumber id={field.name} value={field.value} onValueChange={field.onChange} style=\{{ width: '100%' }} />
+{{else if (endswith @key '_id')}}
+                                        <Dropdown id={field.name} value={field.value} onChange={field.onChange} options={ {{slice @key 0 -3}}Values } optionLabel="name" optionValue="_id" placeholder="Select {{@key}}" style=\{{ width: '100%' }} />
+{{else if (compare this.type '==' 'boolean')}}
+                                        <Checkbox onChange={field.onChange} checked={field.value}></Checkbox>
+{{else}}
+                                        <InputText id={field.name} value={field.value || ''} onChange={field.onChange} style=\{{ width: '100%' }} />
+{{/if}}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    />
+{{/each}}
+                    <div className='flex justify-content-end'>
+                        <Button label="Submit" type="submit" icon="pi pi-check" />
+                    </div>
+                </form>
+            </Dialog>
+            <ConfirmDialog visible={confirmDialogVisible} accept={deleteSelectedRow} message="Are you sure you want to delete item?"
+                header="Confirmation" icon="pi pi-exclamation-triangle" onHide={() => setConfirmDialogVisible(false)} />
             <div className="card">
-                <DataTable value={ {{capitalLower @key}}Values } responsiveLayout="scroll">
+                <DataTable value={ {{capitalLower @key}}Values } responsiveLayout="scroll" selectionMode="single" selection={selectedRow}
+                    onSelectionChange={(e) => setSelectedRow(e.value)} >
+                    <Column selectionMode="single" header="Select one"></Column>
                     <Column field="_id" header="ID"></Column>{{#each this.properties}}
                     <Column field="{{@key}}" header="{{capitalUpper @key}}"></Column>{{/each}}
                 </DataTable>
+            </div>
+            <div className='vertical-align-baseline'>
+                <Button label="New" icon="pi pi-check" onClick={() => {
+                    setSelectedRow(null);
+                    setEditedRow({});
+                    setVisible(true);
+                }} />
+                <Button label="Modify" icon="pi pi-check" onClick={() => {
+                    setEditedRow(selectedRow);
+                    setVisible(true);
+                } } disabled={selectedRow && selectedRow._id ? false : true} />
+                <Button label="Delete" icon="pi pi-check" onClick={() => setConfirmDialogVisible(true)} disabled={selectedRow && selectedRow._id ? false : true} />
             </div>
         </div>
     )

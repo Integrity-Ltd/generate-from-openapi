@@ -50,6 +50,10 @@ class CodeGenerator {
             let result = value.endsWith(pattern);
             return result;
         });
+        Handlebars.registerHelper('slice', function (value, start, end) {
+            let result = value.slice(start, end);
+            return result;
+        });
         Handlebars.registerHelper('compare', function (lvalue: any, operator: any, rvalue: any) {
             if (arguments.length < 3) {
                 throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
