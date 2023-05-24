@@ -1,5 +1,6 @@
 import fs from 'fs'
 import Handlebars from 'handlebars'
+require("dotenv").config();
 
 class CodeGenerator {
     private context: any;
@@ -16,11 +17,13 @@ class CodeGenerator {
         this.initContext();
         fs.readdir('./templates', (err, files) => {
             files.forEach(file => {
-                this.loadTemplate(file);
-                this.renderTemplate();
-                this.splitRenderedTemplateToFiles();
-                if (file == 'crud-requests.tpl') {
-                    this.updateOpenApiDeclaration();
+                if (file.endsWith('.tpl')) {
+                    this.loadTemplate(file);
+                    this.renderTemplate();
+                    this.splitRenderedTemplateToFiles();
+                    if (file == 'crud-requests.tpl') {
+                        this.updateOpenApiDeclaration();
+                    }
                 }
             })
         })
@@ -141,7 +144,10 @@ class CodeGenerator {
             methods.forEach((key) => {
                 this.context['paths'][key] = crudContext[key];
             })
-            fs.writeFileSync("../quiz-sample/openapi.json", JSON.stringify(this.context, null, 4));
+            const updatedOpenApiFile: string | undefined = process.env.FOR_UPDATE_OPENAPI_FILE;
+            if (updatedOpenApiFile && fs.existsSync(updatedOpenApiFile)) {
+                fs.writeFileSync(updatedOpenApiFile, JSON.stringify(this.context, null, 4));
+            }
         }
 
     }

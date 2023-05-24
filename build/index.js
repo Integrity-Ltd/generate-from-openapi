@@ -14,10 +14,10 @@ class CodeGenerator {
         this.registerHelpers();
     }
     process() {
+        this.initContext();
         fs_1.default.readdir('./templates', (err, files) => {
             files.forEach(file => {
                 this.loadTemplate(file);
-                this.initContext();
                 this.renderTemplate();
                 this.splitRenderedTemplateToFiles();
                 if (file == 'crud-requests.tpl') {
@@ -80,7 +80,22 @@ class CodeGenerator {
         this.template = fs_1.default.readFileSync('./templates/' + file, 'utf8');
     }
     initContext() {
-        this.openapi = fs_1.default.readFileSync('openapi.json', 'utf8');
+        if (process.argv.length > 2) {
+            if (fs_1.default.existsSync(process.argv[2])) {
+                this.openapi = fs_1.default.readFileSync(process.argv[2], 'utf8');
+            }
+            else {
+                throw new Error("File " + process.argv[2] + " does not exist.");
+            }
+        }
+        else {
+            if (fs_1.default.existsSync('openapi.json')) {
+                this.openapi = fs_1.default.readFileSync('openapi.json', 'utf8');
+            }
+            else {
+                throw new Error("File openapi.json does not exist.");
+            }
+        }
         this.context = JSON.parse(this.openapi);
     }
     renderTemplate() {
