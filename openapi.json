@@ -205,6 +205,111 @@
         },
         "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3733310-run"
       }
+    },
+    "/api/questionanswer/slice": {
+      "get": {
+        "summary": "Get QuestionAnswer by range",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "first",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "rowcount",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "question",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3743890-run"
+      }
+    },
+    "/api/questionanswer/count": {
+      "get": {
+        "summary": "Get QuestionAnswer count",
+        "x-apidog-folder": "",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "question",
+            "in": "query",
+            "description": "filter by query content",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  },
+                  "x-apidog-orders": [
+                    "count"
+                  ],
+                  "required": [
+                    "count"
+                  ],
+                  "x-apidog-ignore-properties": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://www.apidog.com/web/project/362580/apis/api-3745098-run"
+      }
     }
   },
   "components": {
