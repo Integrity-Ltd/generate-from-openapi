@@ -21,7 +21,7 @@ class CodeGenerator {
                     this.loadTemplate(file);
                     this.renderTemplate();
                     this.splitRenderedTemplateToFiles();
-                    if (file == 'crud-requests.tpl') {
+                    if (file == 'crud-requests.hbs') {
                         this.updateOpenApiDeclaration();
                     }
                 }
