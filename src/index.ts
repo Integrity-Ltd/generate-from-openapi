@@ -17,7 +17,7 @@ class CodeGenerator {
         this.initContext();
         fs.readdir('./templates', (err, files) => {
             files.forEach(file => {
-                if (file.endsWith('.tpl')) {
+                if (file.endsWith('.hbs')) {
                     this.loadTemplate(file);
                     this.renderTemplate();
                     this.splitRenderedTemplateToFiles();
