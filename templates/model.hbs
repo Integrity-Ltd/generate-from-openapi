@@ -30,8 +30,18 @@ import Joi from "joi";
 const router = Router();
 
 router.get("/", async (req, res) => {
+    if (req.query.first && req.query.rowcount) {
+        let result = await {{@key}}.{{@key}}.find({}).skip(parseInt(req.query.first as string)).limit(parseInt(req.query.rowcount as string));
+        res.send(result);
+    } else {
+        let result = await {{@key}}.{{@key}}.find({});
+        res.send(result);
+    }
+});
+
+router.get("/count", async (req, res) => {
     let result = await {{@key}}.{{@key}}.find({});
-    res.send(result);
+    res.send({ count: result.length });
 });
 
 router.get("/:id", async (req, res) => {
