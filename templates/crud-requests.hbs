@@ -10,7 +10,18 @@
         "deprecated": false,
         "description": "",
         "tags": ["{{@key}}"],
-        "parameters": [ ],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+            "type": "string"
+            }
+          }
+         ],
         "responses": {
           "200": {
             "description": "OK",
@@ -65,6 +76,16 @@
             "example": "",
             "schema": {
               "type": "number"
+            }
+          },
+          {
+          "name": "filter",
+          "in": "query",
+          "description": "",
+          "required": false,
+          "example": "",
+          "schema": {
+            "type": "string"
             }
           }
         ],
