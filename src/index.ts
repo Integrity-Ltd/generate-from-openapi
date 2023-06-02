@@ -15,7 +15,8 @@ class CodeGenerator {
 
     public process() {
         this.initContext();
-        fs.readdir('./templates', (err, files) => {
+        const templatesPath = process.argv.length > 3 ? process.argv[3] : './templates';
+        fs.readdir(templatesPath, (err, files) => {
             files.forEach(file => {
                 if (file.endsWith('.hbs')) {
                     this.loadTemplate(file);
@@ -83,7 +84,8 @@ class CodeGenerator {
     }
 
     private loadTemplate(file: string) {
-        this.template = fs.readFileSync('./templates/' + file, 'utf8');
+        const templatesPath = process.argv.length > 3 ? process.argv[3] : './templates';
+        this.template = fs.readFileSync(templatesPath + '/' + file, 'utf8');
     }
 
     private initContext() {
