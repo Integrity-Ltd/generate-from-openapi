@@ -1,8 +1,9 @@
 {{#each components.schemas}}
 {{#if (startswith this.x-apidog-folder 'CRUD')}}
 >>>>> ../quiz-admin/src/pages/ {{@key}}.tsx
-import { useEffect, useRef, useState } from "react";
-import { DataTable } from 'primereact/datatable';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { DataTable, DataTableStateEvent, DataTableSelectionChangeEvent } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from "primereact/toast";
 import { useForm, Controller } from "react-hook-form";
@@ -22,19 +23,61 @@ interface FormValues {
 }
 
 const {{@key}} = () => {
-    const [{{capitalLower @key}}Values, set{{@key}}Values] = useState([]);
+    const queryClient = useQueryClient();
+    const [lazyState, setLazyState] = useState<DataTableStateEvent>({
+        first: 0,
+        rows: 10,
+        page: 0,
+        pageCount: 0,
+        sortField: "",
+        sortOrder: 1,
+        multiSortMeta: [],
+        filters: {
+        },
+    });
+
     const [editedRow, setEditedRow] = useState<any>({});
     const [selectedRow, setSelectedRow] = useState<any>({});
     const [visible, setVisible] = useState(false);
     const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
 
-    useEffect(() => {
-        fetchAll();
+    const onPage = useCallback((event: DataTableStateEvent) => {
+        setLazyState(event);
+    }, []);
+    
+    const onFilter = useCallback((event: DataTableStateEvent) => {
+        event.first = 0;
+        setLazyState(event);
+    }, []);
+    
+    const onSelectionChange = useCallback((e: DataTableSelectionChangeEvent<any>) => {
+        setSelectedRow(e.value);
     }, []);
 
-    useEffect(() => {
-        console.log(selectedRow);
-    }, [selectedRow]);
+    const updatePage = () => {
+        queryClient.invalidateQueries({ queryKey: ["{{lowercase @key}}"] });
+        queryClient.invalidateQueries({ queryKey: ["{{lowercase @key}}count"] });
+    };
+
+    const { data: {{capitalLower @key}}Values, status: dataFetchStatus, isLoading: isDataLoading } = useQuery({
+        queryKey: ["{{lowercase @key}}", lazyState],
+        queryFn: async () => {
+                const filters = encodeURIComponent(JSON.stringify(lazyState.filters));
+                const res = await fetch(`/api/admin/crud/{{lowercase @key}}?first=${lazyState.first}&rowcount=${lazyState.rows}&filter=${filters}`);
+                return res.json();
+        }
+    });
+    
+    const { data: count, isLoading: isCountLoading } = useQuery<number>({
+        queryKey: ["{{lowercase @key}}count", lazyState],
+        queryFn: async () => {
+            const filters = encodeURIComponent(JSON.stringify(lazyState.filters));
+            const res = await fetch(`/api/admin/crud/{{lowercase @key}}/count?filter=${filters}`);
+            const { count } = await res.json();
+            return count;
+        }
+    });
+
 
     async function resolver(values: any) {
         return {
@@ -83,23 +126,12 @@ const {{@key}} = () => {
         }
     }
 
-    const updatePage = () => {
-        setSelectedRow({});
-        fetchAll();
-    }
-
     const show = (severity: "success" | "info" | "warn" | "error" | undefined, message: string) => {
         if (toast.current !== null) {
             toast.current.show({ severity: severity, summary: 'Form submit', detail: message });
         }
     }
 
-    const fetchAll = () => {
-        fetch('/api/admin/crud/{{lowercase @key}}').then((response) => response.json()).then(data => {
-            console.log(data);
-            set{{@key}}Values(data);
-        });
-    }
 {{#each this.properties}}
 {{#if (endswith @key '_id')}}
     const [{{slice @key 0 -3}}Values, set{{capitalUpper (slice @key 0 -3)}}Values] = useState<any>([]);
@@ -111,9 +143,8 @@ const {{@key}} = () => {
 {{/if}}
 {{/each}}
     useEffect(() => {
-        //console.log(selectedRows);{{#each this.properties}}
-        {{#if (endswith @key '_id')}}fetch{{capitalUpper (slice @key 0 -3)}}Values();{{/if}}
-{{/each}}
+        //console.log(selectedRows);{{#each this.properties}}{{#if (endswith @key '_id')}}
+        fetch{{capitalUpper (slice @key 0 -3)}}Values();{{/if}}{{/each}}
         if (editedRow) {
 {{#each this.properties}}
             setValue("{{@key}}", {{#if (endswith @key '_id')}}editedRow.{{@key}}?editedRow.{{@key}}:null{{else if (compare this.type '==' 'number')}}editedRow.{{@key}}?editedRow.{{@key}}:0{{else}}editedRow.{{@key}}{{/if}});
@@ -184,8 +215,23 @@ const {{@key}} = () => {
             <ConfirmDialog visible={confirmDialogVisible} accept={deleteSelectedRow} message="Are you sure you want to delete item?"
                 header="Confirmation" icon="pi pi-exclamation-triangle" onHide={() => setConfirmDialogVisible(false)} />
             <div className="card">
-                <DataTable value={ {{capitalLower @key}}Values } responsiveLayout="scroll" selectionMode="single" selection={selectedRow}
-                    onSelectionChange={(e) => setSelectedRow(e.value)} >
+                <DataTable value={ {{capitalLower @key}}Values }
+                        responsiveLayout="scroll"
+                        selectionMode="single"
+                        selection={selectedRow}
+                        onSelectionChange={onSelectionChange}
+                        first={lazyState.first}
+                        paginator={true}
+                        lazy={true}
+                        rows={10}
+                        totalRecords={count ?? 0}
+                        onPage={onPage}
+                        loading={isDataLoading || isCountLoading}
+                        onFilter={onFilter}
+                        filters={lazyState.filters}
+                        filterDisplay="row"
+                        tableStyle=\{{ minWidth: '50rem' }}    
+                    >
                     <Column selectionMode="single" header="Select one"></Column>
                     <Column field="_id" header="ID"></Column>{{#each this.properties}}
                     <Column field="{{@key}}" header="{{capitalUpper @key}}"></Column>{{/each}}
