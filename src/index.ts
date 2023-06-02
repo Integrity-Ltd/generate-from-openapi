@@ -2,12 +2,28 @@ import fs from 'fs'
 import Handlebars from 'handlebars'
 require("dotenv").config();
 
+class GeneratedFiles {
+    private _path: string = "";
+    private _fileName: string = "";
+    public get path(): string {
+        return this._path;
+    }
+    public get fileName(): string {
+        return this._fileName;
+    }
+    constructor(path: string, fileName: string) {
+        this._path = path;
+        this._fileName = fileName;
+    }
+}
+
 class CodeGenerator {
     private context: any;
     private openapi: string = "";
     private template: string = "";
     private compiledTemplate: HandlebarsTemplateDelegate<any> | null = null;
     private renderedTemplate: string = "";
+    private outputs: GeneratedFiles[] = [];
 
     constructor() {
         this.registerHelpers();
@@ -23,7 +39,10 @@ class CodeGenerator {
                     this.renderTemplate();
                     this.splitRenderedTemplateToFiles();
                     if (file == 'crud-requests.hbs') {
-                        this.updateOpenApiDeclaration();
+                        this.outputs.filter((output: GeneratedFiles) => output.fileName == 'openapi-crud-requests.json').
+                            map((output: GeneratedFiles) => {
+                                this.updateOpenApiDeclaration(output.path + output.fileName);
+                            })
                     }
                 }
             })
@@ -130,6 +149,7 @@ class CodeGenerator {
                             console.log(`directory '${path}' created`)
                         });
                     }
+                    this.outputs.push(new GeneratedFiles(path, fileName));
                     fs.writeFileSync(path + fileName + (fs.existsSync(path + fileName + '.lock') ? '.backport' : ''), linesInFile.join("\n"));
                 }
             } else {
@@ -138,9 +158,9 @@ class CodeGenerator {
         });
     }
 
-    public updateOpenApiDeclaration() {
-        if (fs.existsSync("./openapi-crud-requests.json")) {
-            const crudOpenApi = fs.readFileSync("./openapi-crud-requests.json", 'utf8');
+    public updateOpenApiDeclaration(generatedFileName: string) {
+        if (fs.existsSync(generatedFileName)) {
+            const crudOpenApi = fs.readFileSync(generatedFileName, 'utf8');
             const crudContext = JSON.parse(crudOpenApi);
             let methods = Object.keys(crudContext);
             methods.forEach((key) => {
