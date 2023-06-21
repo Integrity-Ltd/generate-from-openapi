@@ -145,9 +145,8 @@ class CodeGenerator {
                     linesInFile = []
                 } else if (separatedPartInfo.length == 1) {
                     if (!fs.existsSync(path)) {
-                        fs.mkdir(path, { recursive: true }, () => {
-                            console.log(`directory '${path}' created`)
-                        });
+                        fs.mkdirSync(path, { recursive: true });
+                        console.log(`directory '${path}' created`)
                     }
                     this.outputs.push(new GeneratedFiles(path, fileName));
                     fs.writeFileSync(path + fileName + (fs.existsSync(path + fileName + '.lock') ? '.backport' : ''), linesInFile.join("\n"));
